@@ -1,5 +1,5 @@
-STUID = 221220000
-STUNAME = 张三
+STUID = 23021211643
+STUNAME =Shi Yang
 
 # DO NOT modify the following code!!!
 
