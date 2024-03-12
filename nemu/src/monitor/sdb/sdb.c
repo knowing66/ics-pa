@@ -97,7 +97,7 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args){
-  int N=*args-'0';
+  uint64_t N=*args-'0';
   if(args==NULL||N==1){
   cpu_exec(1);
   }
