@@ -57,6 +57,8 @@ static int cmd_si(char *args);
 
 static int cmd_help(char *args);
 
+static int cmd_info(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -66,6 +68,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   {"si","Execute the program for N step",cmd_si},
+  {"info","Print the val of regesiters on screen",cmd_info},
 
   /* TODO: Add more commands */
 
@@ -105,6 +108,10 @@ static int cmd_si(char *args){
   else{
     cpu_exec(1);
   }
+  return 0;
+}
+
+static int cmd_info(char *args){
   return 0;
 }
 
