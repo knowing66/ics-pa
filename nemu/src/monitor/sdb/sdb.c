@@ -97,12 +97,14 @@ static int cmd_help(char *args) {
 }
 
 static int cmd_si(char *args){
-  uint64_t N=*args-'0';
-  if(args==NULL||N==1){
-  cpu_exec(1);
+  if(args!=NULL){
+    uint64_t N=*args-'0';
+    cpu_exec(N);
+
   }
-  else
-  cpu_exec(N);
+  else{
+    cpu_exec(1);
+  }
   return 0;
 }
 
