@@ -32,7 +32,7 @@ void isa_reg_display(char *args) {
   }
   else{
     word_t regsnumber=isa_reg_str2val(args,success);
-    printf("$0   =    %X\n",cpu.gpr[regsnumber]);
+    printf("%s     =     0x%X\n",regs[regsnumber],cpu.gpr[regsnumber]);
   }
 }
 
