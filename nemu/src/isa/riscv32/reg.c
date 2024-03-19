@@ -27,7 +27,7 @@ void isa_reg_display(char *args) {
   bool *success=NULL;
   if(*args=='r'){
     for(int i=0;i<32;i++){
-      printf("regs[i]   =    %X\n",cpu.gpr[i]);
+      printf("*(regs[i])   =    %X\n",cpu.gpr[i]);
     }
   }
   else{
