@@ -124,10 +124,12 @@ static int cmd_info(char *args){
 
 static int cmd_x(char *args){
     unsigned int address;
+    int num;
     char *nums4bits= strtok(args, " ");
     char *args2 = nums4bits + strlen(nums4bits) + 1;
     sscanf(args2,"%x",&address);
-    for(int i=0;i<*nums4bits-'0';i++){
+    sscanf(nums4bits,"%x",&num);
+    for(int i=0;i<num;i++){
       printf("0x%08x   =   0x%08x\n",address,paddr_read(address,4));
       address+=4;
     }
