@@ -128,7 +128,7 @@ static int cmd_x(char *args){
     char *args2 = nums4bits + strlen(nums4bits) + 1;
     sscanf(args2,"%x",&address);
     for(int i=0;i<*nums4bits-'0';i++){
-      printf("%08x   =   %08x\n",address,paddr_read(address,4));
+      printf("0x%08x   =   0x%08x\n",address,paddr_read(address,4));
       address+=4;
     }
   return 0;
