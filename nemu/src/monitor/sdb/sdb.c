@@ -15,6 +15,7 @@
 
 #include <isa.h>
 #include <cpu/cpu.h>
+#include <memory/paddr.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
@@ -59,6 +60,8 @@ static int cmd_help(char *args);
 
 static int cmd_info(char *args);
 
+static int cmd_x(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -69,6 +72,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   {"si","Execute the program for N step",cmd_si},
   {"info","Print the val of regesiters on screen",cmd_info},
+  {"x","Examine Ram",cmd_x},
 
   /* TODO: Add more commands */
 
@@ -114,8 +118,19 @@ static int cmd_si(char *args){
 static int cmd_info(char *args){
   if(*args=='r'){
     isa_reg_display();
-  }
-  
+  }  
+  return 0;
+}
+
+static int cmd_x(char *args){
+    unsigned int *address=NULL;
+    char *nums4bits = strtok(args, " ");
+    char *args2 = nums4bits + strlen(nums4bits) + 1;
+    sscanf(args2,"%x",address);
+    for(int i=0;i<*nums4bits-'0';i++){
+      printf("%x   =   %x\n",*address,paddr_read(*address,4));
+      address+=4;
+    }
   return 0;
 }
 
