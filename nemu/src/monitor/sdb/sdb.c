@@ -124,7 +124,7 @@ static int cmd_info(char *args){
 
 static int cmd_x(char *args){
     unsigned int address;
-    char *nums4bits = strtok(args, " ");
+    char *nums4bits= strtok(args, " ");
     char *args2 = nums4bits + strlen(nums4bits) + 1;
     sscanf(args2,"%x",&address);
     for(int i=0;i<*nums4bits-'0';i++){
