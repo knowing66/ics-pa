@@ -62,6 +62,8 @@ static int cmd_info(char *args);
 
 static int cmd_x(char *args);
 
+static int cmd_p(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -73,6 +75,7 @@ static struct {
   {"si","Execute the program for N step",cmd_si},
   {"info","Print the val of regesiters on screen",cmd_info},
   {"x","Examine Ram",cmd_x},
+  {"p","Evaluate expression",cmd_p},
 
   /* TODO: Add more commands */
 
@@ -133,6 +136,12 @@ static int cmd_x(char *args){
       printf("0x%08x   =   0x%08x\n",address,paddr_read(address,4));
       address+=4;
     }
+  return 0;
+}
+
+static int cmd_p(char *args){
+  bool *success=NULL;
+  expr(args,success);
   return 0;
 }
 
