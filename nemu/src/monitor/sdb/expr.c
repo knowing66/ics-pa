@@ -174,10 +174,10 @@ bool check_parentheses(Token *tokens,int leftpositon,int rightposition){
 }
 
 word_t evaluate(Token *tokens,int leftpositon,int rightposition){
-  if(leftpositon>rightposition){
-    return 0;
-  }
-  else if(leftpositon==rightposition){
+  //if(leftpositon>rightposition){
+   // return 0;
+  //}
+  if(leftpositon==rightposition){
     word_t sum=0;
     word_t strpos=0;
     while(tokens[leftpositon].str[strpos]!='\0'){
