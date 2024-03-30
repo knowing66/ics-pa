@@ -142,9 +142,9 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-
+  //the token has been stored in tokens[32]
   /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  
 
   return 0;
 }
