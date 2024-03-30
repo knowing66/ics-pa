@@ -24,6 +24,7 @@ enum {
   
   TK_NOTYPE = 256, TK_EQ,
   TK_NUMBER,TK_PLUS,TK_MINUS,TK_MUL,TK_DIV,
+  TK_LEFTPAR,TK_RIGHTPAR,
   /* TODO: Add more token types */
 
 };
@@ -43,6 +44,8 @@ static struct rule {
   {"\\*",TK_MUL},
   {"/",TK_DIV},
   {"==", TK_EQ},        // equal
+  {"(", TK_LEFTPAR},
+  {")", TK_RIGHTPAR},
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -104,21 +107,35 @@ static bool make_token(char *e) {
                 tokens[nr_token].type=TK_NUMBER;
                 strncpy(tokens[nr_token].str,substr_start,substr_len);
                 tokens[nr_token].str[substr_len]='\0';
+                nr_token++;
                 break;
             case TK_EQ:
                 tokens[nr_token].type=TK_EQ;
+                nr_token++;
                 break;
             case TK_PLUS:
                 tokens[nr_token].type=TK_PLUS;
+                nr_token++;
                 break;
             case TK_MINUS:
                 tokens[nr_token].type=TK_MINUS;
+                nr_token++;
                 break;
             case TK_MUL:
                 tokens[nr_token].type=TK_MUL;
+                nr_token++;
                 break;
             case TK_DIV:
                 tokens[nr_token].type=TK_DIV;
+                nr_token++;
+                break;
+            case TK_LEFTPAR:
+                tokens[nr_token].type=TK_LEFTPAR;
+                nr_token++;
+                break;
+            case TK_RIGHTPAR:
+                tokens[nr_token].type=TK_RIGHTPAR;
+                nr_token++;
                 break;
           default: printf("I DONT KNOW");
         }
@@ -136,6 +153,71 @@ static bool make_token(char *e) {
   return true;
 }
 
+bool check_parentheses(Token *tokens,int leftpositon,int rightposition){
+  int stack=0;
+  if(tokens[leftpositon].type!=TK_LEFTPAR||tokens[rightposition].type!=TK_RIGHTPAR)
+    return false;
+  else {
+    while(leftpositon<=rightposition){
+      if(tokens[leftpositon].type==TK_LEFTPAR)
+        stack++;
+      if(tokens[leftpositon].type==TK_RIGHTPAR)
+        stack--;
+      if(stack<0)
+        return false;
+      leftpositon++;
+    }
+  }
+  if(stack==0)
+    return true;
+  else
+    return false;
+}
+
+word_t evaluate(Token *tokens,int leftpositon,int rightposition){
+  if(leftpositon>rightposition){
+    return 0;
+  }
+  else if(leftpositon==rightposition){
+    word_t sum=0;
+    int strpos=0;
+    while(tokens[leftpositon].str[strpos]!='\0'){
+      sum=sum*10+(tokens[leftpositon].str[strpos]-'0');
+      strpos++;
+    }
+    return sum; 
+  }
+  else if(check_parentheses(tokens,leftpositon,rightposition) == true){
+
+    return evaluate(tokens,leftpositon+1,rightposition-1);
+  }
+  else{
+    int op=0;
+    for(int i=0;i<nr_token;i++){
+      if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS)&&check_parentheses(tokens,leftpositon,i-1)&&check_parentheses(tokens,i+1,rightposition)){
+        op=i;
+        break;
+      }
+      if((tokens[i].type==TK_MUL||tokens[i].type==TK_DIV)&&check_parentheses(tokens,leftpositon,i-1)&&check_parentheses(tokens,i+1,rightposition)){
+        op=i;
+      }
+    }
+  
+    /*op = the position of 主运算符 in the token expression;*/
+    word_t val1 = evaluate(tokens,leftpositon, op - 1);
+    word_t val2 = evaluate(tokens,op + 1, rightposition);
+
+    switch (tokens[op].type) {
+      case TK_PLUS: return val1 + val2;
+      case TK_MINUS: return val1 - val2;
+      case TK_MUL: return val1 * val2;
+      case TK_DIV: return val1 / val2;
+      default: assert(0);
+    }  
+
+  }
+}
+
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -144,7 +226,7 @@ word_t expr(char *e, bool *success) {
   }
   //the token has been stored in tokens[32]
   /* TODO: Insert codes to evaluate the expression. */
-  
+  printf("the result is %d\n",evaluate(tokens,0,nr_token-1)) ;
 
   return 0;
 }
