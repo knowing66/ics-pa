@@ -163,8 +163,7 @@ bool check_parentheses(Token *tokens,int leftpositon,int rightposition){
         stack++;
       if(tokens[leftpositon].type==TK_RIGHTPAR)
         stack--;
-      if(stack<0)
-        return false;
+      
       leftpositon++;
     }
   }
