@@ -44,8 +44,8 @@ static struct rule {
   {"\\*",TK_MUL},
   {"/",TK_DIV},
   {"==", TK_EQ},        // equal
-  {"(", TK_LEFTPAR},
-  {")", TK_RIGHTPAR},
+  {"\\(", TK_LEFTPAR},
+  {"\\)", TK_RIGHTPAR},
 };
 
 #define NR_REGEX ARRLEN(rules)
