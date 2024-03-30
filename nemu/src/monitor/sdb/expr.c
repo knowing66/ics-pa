@@ -180,7 +180,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
   }
   else if(leftpositon==rightposition){
     word_t sum=0;
-    int strpos=0;
+    word_t strpos=0;
     while(tokens[leftpositon].str[strpos]!='\0'){
       sum=sum*10+(tokens[leftpositon].str[strpos]-'0');
       strpos++;
@@ -192,7 +192,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
     return evaluate(tokens,leftpositon+1,rightposition-1);
   }
   else{
-    int op=0;
+    word_t op=0;
     for(int i=0;i<nr_token;i++){
       if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS)&&check_parentheses(tokens,leftpositon,i-1)&&check_parentheses(tokens,i+1,rightposition)){
         op=i;
