@@ -155,6 +155,9 @@ static bool make_token(char *e) {
 
 bool check_parentheses(Token *tokens,int leftpositon,int rightposition){
   int stack=0;
+  if(leftpositon==rightposition&&tokens[leftpositon].type== TK_NUMBER){
+    return  true;
+  }
   if(tokens[leftpositon].type!=TK_LEFTPAR||tokens[rightposition].type!=TK_RIGHTPAR)
     return false;
   else {
