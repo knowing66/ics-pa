@@ -155,22 +155,46 @@ static bool make_token(char *e) {
 
 bool check_parentheses(Token *tokens,int leftpositon,int rightposition){
   int stack=0;
-  if(leftpositon==rightposition&&tokens[leftpositon].type== TK_NUMBER){
-    return  true;
-  }
+  //if(leftpositon==rightposition&&tokens[leftpositon].type== TK_NUMBER){
+  //  return  true;
+  //}
   if(tokens[leftpositon].type!=TK_LEFTPAR||tokens[rightposition].type!=TK_RIGHTPAR)
     return false;
   else {
-    while(leftpositon<=rightposition){
-      if(tokens[leftpositon].type==TK_LEFTPAR)
+    while(leftpositon+1<=rightposition-1){
+      if(tokens[leftpositon+1].type==TK_LEFTPAR)
         stack++;
-      if(tokens[leftpositon].type==TK_RIGHTPAR)
+      if(tokens[leftpositon+1].type==TK_RIGHTPAR)
         stack--;
       
+      if(stack<0){
+        return false;
+      }
       
       leftpositon++;
     }
   }
+  if(stack==0)
+    return true;
+  else
+    return false;
+}
+
+bool onlycheck_parentheses(Token *tokens,int leftpositon,int rightposition){
+  int stack=0;
+  while(leftpositon<=rightposition){
+    if(tokens[leftpositon].type==TK_LEFTPAR)
+        stack++;
+    if(tokens[leftpositon].type==TK_RIGHTPAR)
+        stack--;
+
+    if(stack<0){
+      return false;
+    }
+      
+    leftpositon++;
+  }
+  
   if(stack==0)
     return true;
   else
@@ -197,11 +221,11 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
   else{
     word_t op=0;
     for(int i=0;i<nr_token;i++){
-      if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS)&&check_parentheses(tokens,leftpositon,i-1)&&check_parentheses(tokens,i+1,rightposition)){
+      if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
         op=i;
         break;
       }
-      if((tokens[i].type==TK_MUL||tokens[i].type==TK_DIV)&&check_parentheses(tokens,leftpositon,i-1)&&check_parentheses(tokens,i+1,rightposition)){
+      if((tokens[i].type==TK_MUL||tokens[i].type==TK_DIV)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
         op=i;
       }
     }
