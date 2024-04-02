@@ -38,9 +38,38 @@ uint32_t choose(uint32_t n){
 
 static void gen_rand_expr() {
   switch (choose(3)) {
-    case 0: gen_num(); break;
-    case 1: gen('('); gen_rand_expr(); gen(')'); break;
-    default: gen_rand_expr(); gen_rand_op(); gen_rand_expr(); break;
+    case 0: 
+          *buf='0'+choose(20); 
+          buf++;
+          break;
+    case 1: 
+          *buf='('; 
+          buf++;
+          gen_rand_expr(); 
+          *buf=')'; 
+          break;
+    default: 
+          gen_rand_expr(); 
+          switch (choose(4))
+          {
+          case 0:
+            *buf='+';
+            break;
+          case 1:
+            *buf='-';
+            break;
+          case 2:
+            *buf='*';
+            break;
+          case 3:
+            *buf='/';
+            break;
+          
+          default:
+            break;
+          } 
+          gen_rand_expr(); 
+          break;
   }
 }
 
