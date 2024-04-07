@@ -31,7 +31,7 @@ int main(int argc, char *argv[]) {
 
   /* Start engine. */
   engine_start();
-  FILE *input_file = fopen("input", "r");
+  FILE *input_file = fopen("/home/shiyang/ics2023/nemu/tools/gen-expr/input", "r");
     if (input_file == NULL) {
         perror("Error opening input file");
         return EXIT_FAILURE;
