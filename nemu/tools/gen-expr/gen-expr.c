@@ -22,7 +22,7 @@
 
 // this should be enough
 static char buf[65536] = {};
-static char code_buf[65536 + 128] = {}; // a little larger than `buf`
+static char code_buf[65536 + 256] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
@@ -37,40 +37,40 @@ uint32_t choose(uint32_t n){
 }
 
 static void gen_rand_expr() {
-  switch (choose(3)) {
-    case 0: 
-          *buf='0'+choose(20); 
-          buf++;
-          break;
-    case 1: 
-          *buf='('; 
-          buf++;
-          gen_rand_expr(); 
-          *buf=')'; 
-          break;
-    default: 
-          gen_rand_expr(); 
-          switch (choose(4))
-          {
-          case 0:
-            *buf='+';
+    char append[2] = {'\0', '\0'}; // Initialize append as a null-terminated string
+    //int length=0;
+    switch (choose(3)) {
+        case 0: 
+            append[0] = '0' + choose(10); // Generate a random digit
+            strcat(buf, append); // Append the character to buf
             break;
-          case 1:
-            *buf='-';
+        case 1: 
+            append[0] = '('; // Add opening parenthesis
+            strcat(buf, append); // Append the character to buf
+            gen_rand_expr(); // Generate a random expression
+            append[0] = ')'; // Add closing parenthesis
+            strcat(buf, append); // Append the character to buf
             break;
-          case 2:
-            *buf='*';
+        default: 
+            gen_rand_expr(); // Generate a random expression
+            switch (choose(4)) {
+                case 0:
+                    append[0] = '+'; // Choose a random arithmetic operator
+                    break;
+                case 1:
+                    append[0] = '-';
+                    break;
+                case 2:
+                    append[0] = '*';
+                    break;
+                default:
+                    append[0] = '/';
+                    break;
+            }
+            strcat(buf, append); // Append the operator to buf
+            gen_rand_expr(); // Generate another random expression
             break;
-          case 3:
-            *buf='/';
-            break;
-          
-          default:
-            break;
-          } 
-          gen_rand_expr(); 
-          break;
-  }
+    }
 }
 
 int main(int argc, char *argv[]) {
@@ -82,6 +82,8 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    strcpy(buf, "");
+
     gen_rand_expr();
 
     sprintf(code_buf, code_format, buf);
