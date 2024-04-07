@@ -253,7 +253,7 @@ word_t expr(char *e, bool *success) {
   }
   //the token has been stored in tokens[32]
   /* TODO: Insert codes to evaluate the expression. */
-  printf("the result is %d\n",evaluate(tokens,0,nr_token-1)) ;
+  printf("the result is %u\n",evaluate(tokens,0,nr_token-1)) ;
 
   return evaluate(tokens,0,nr_token-1);
 }
