@@ -30,7 +30,7 @@ int main(int argc, char *argv[]) {
 #endif
 
   /* Start engine. */
-  //engine_start();
+  engine_start();
   FILE *input_file = fopen("input", "r");
     if (input_file == NULL) {
         perror("Error opening input file");
