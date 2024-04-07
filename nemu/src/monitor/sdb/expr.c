@@ -255,5 +255,5 @@ word_t expr(char *e, bool *success) {
   /* TODO: Insert codes to evaluate the expression. */
   printf("the result is %d\n",evaluate(tokens,0,nr_token-1)) ;
 
-  return 0;
+  return evaluate(tokens,0,nr_token-1);
 }

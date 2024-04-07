@@ -21,6 +21,7 @@
 #include <string.h>
 
 // this should be enough
+//static int controlparent[2];
 static char buf[65536] = {};
 static char code_buf[65536 + 256] = {}; // a little larger than `buf`
 static char *code_format =
@@ -36,23 +37,34 @@ uint32_t choose(uint32_t n){
   return rand() % n;
 }
 
-static void gen_rand_expr() {
-    char append[2] = {'\0', '\0'}; // Initialize append as a null-terminated string
+static void gen_num(){
+    int randnum = choose(100);
+    char num[4]; // Allocate enough space for a three-digit number and null terminator
+    sprintf(num, "%d", randnum); // Convert the number to string format
+    strcat(buf, num); // Append the number to buf
+}
+
+static void gen_rand_expr(int depth) {
+    char append[2] = {'\0', '\0'};
+    if(depth>2){
+        gen_num();
+        return;  
+    }
+ // Initialize append as a null-terminated string
     //int length=0;
     switch (choose(3)) {
-        case 0: 
-            append[0] = '0' + choose(10); // Generate a random digit
-            strcat(buf, append); // Append the character to buf
+        case 0:
+            gen_num();
             break;
-        case 1: 
+        case 1:
             append[0] = '('; // Add opening parenthesis
             strcat(buf, append); // Append the character to buf
-            gen_rand_expr(); // Generate a random expression
+            gen_rand_expr(depth+1); // Generate a random expression
             append[0] = ')'; // Add closing parenthesis
             strcat(buf, append); // Append the character to buf
             break;
         default: 
-            gen_rand_expr(); // Generate a random expression
+            gen_rand_expr(depth); // Generate a random expression
             switch (choose(4)) {
                 case 0:
                     append[0] = '+'; // Choose a random arithmetic operator
@@ -68,7 +80,7 @@ static void gen_rand_expr() {
                     break;
             }
             strcat(buf, append); // Append the operator to buf
-            gen_rand_expr(); // Generate another random expression
+            gen_rand_expr(depth); // Generate another random expression
             break;
     }
 }
@@ -84,7 +96,7 @@ int main(int argc, char *argv[]) {
   for (i = 0; i < loop; i ++) {
     strcpy(buf, "");
 
-    gen_rand_expr();
+    gen_rand_expr(0);
 
     sprintf(code_buf, code_format, buf);
 
