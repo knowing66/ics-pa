@@ -201,6 +201,20 @@ bool onlycheck_parentheses(Token *tokens,int leftpositon,int rightposition){
     return false;
 }
 
+word_t op_level(int type){
+  switch(type){
+    case TK_PLUS:return 1;
+    case TK_MINUS:return 1;
+    case TK_MUL:return 2;
+    case TK_DIV:return 2;
+
+    
+    default:printf("unknown op");
+    assert(0);
+  }
+
+}
+
 word_t evaluate(Token *tokens,int leftpositon,int rightposition){
   if(leftpositon>rightposition){
     assert(0);
@@ -221,13 +235,13 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
   else{
     word_t op=rightposition;
     for(int i=rightposition;i>=leftpositon;i--){
-      if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
-        op=i;
-        break;
+      if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS||tokens[i].type==TK_MUL||tokens[i].type==TK_DIV)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
+        if(op_level(tokens[i].type)<op_level(tokens[op].type)){
+          op=i;
+        }
+        
       }
-      if((tokens[i].type==TK_MUL||tokens[i].type==TK_DIV)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
-        op=i;
-      }
+
     }
   
     /*op = the position of 主运算符 in the token expression;*/
