@@ -207,7 +207,7 @@ word_t op_level(int type){
     case TK_MINUS:return 1;
     case TK_MUL:return 2;
     case TK_DIV:return 2;
-    case TK_NUMBER:return 10;
+    case TK_LEFTPAR:case TK_RIGHTPAR: case TK_NUMBER:return 10;
     
     default:printf("unknown op");
     assert(0);
