@@ -140,10 +140,10 @@ static int cmd_x(char *args){
 }
 
 static int cmd_p(char *args){
-  bool *success=NULL;
-  expr(args,success);
-  return 0;
-  /*FILE *input_file = fopen("/home/shiyang/ics2023/nemu/tools/gen-expr/input", "r");
+  //bool *success=NULL;
+  //expr(args,success);
+  //return 0;
+  FILE *input_file = fopen("/home/shiyang/ics2023/nemu/tools/gen-expr/input", "r");
     if (input_file == NULL) {
         perror("Error opening input file");
         return EXIT_FAILURE;
@@ -173,8 +173,8 @@ static int cmd_p(char *args){
     }
 
     // 关闭文件
-    fclose(input_file);*/
-    //return 0;
+    fclose(input_file);
+    return 0;
 }
 
 void sdb_set_batch_mode() {
