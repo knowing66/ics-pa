@@ -164,7 +164,7 @@ static int cmd_p(char *args){
         // 例如，调用 expr() 函数处理表达式
         bool *success=NULL;
         if(result==expr(expression,success)){
-          printf("Result: %u, Expression: %s,right\n", result, expression);
+          ;
         }
         else{
           printf("Result: %u, Expression: %s,wrong\n", result, expression);
