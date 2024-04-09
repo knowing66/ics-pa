@@ -219,7 +219,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
     return evaluate(tokens,leftpositon+1,rightposition-1);
   }
   else{
-    word_t op=0;
+    word_t op=rightposition;
     for(int i=rightposition;i>=leftpositon;i--){
       if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
         op=i;
