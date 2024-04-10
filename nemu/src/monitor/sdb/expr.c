@@ -255,7 +255,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
     else if(tokens[leftpositon].type==TK_REGNAME){
       word_t val=0;
       bool *success=(bool *)malloc(sizeof(bool));
-      val=isa_reg_str2val(tokens[leftpositon].str+1,success);
+      val=isa_reg_str2val(tokens[leftpositon].str,success);
       if(*success==false){
         printf("REGNAME NOT FOUND");
         free(success);
