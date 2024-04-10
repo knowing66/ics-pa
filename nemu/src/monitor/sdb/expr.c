@@ -24,7 +24,7 @@ enum {
   
   TK_NOTYPE = 256, TK_EQ,
   TK_NUMBER,TK_PLUS,TK_MINUS,TK_MUL,TK_DIV,
-  TK_LEFTPAR,TK_RIGHTPAR,
+  TK_LEFTPAR,TK_RIGHTPAR,TK_HEXNUMBER,TK_REGNAME,
   /* TODO: Add more token types */
 
 };
@@ -46,6 +46,9 @@ static struct rule {
   {"==", TK_EQ},        // equal
   {"\\(", TK_LEFTPAR},
   {"\\)", TK_RIGHTPAR},
+  {"0x[0-9a-fA-F]+",TK_HEXNUMBER},
+  {"(\\$[0-9]+|\\$[a-zA-Z][a-zA-Z0-9]*)",TK_REGNAME},
+
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -109,6 +112,12 @@ static bool make_token(char *e) {
                 tokens[nr_token].str[substr_len]='\0';
                 nr_token++;
                 break;
+            case TK_HEXNUMBER:
+                tokens[nr_token].type=TK_HEXNUMBER;
+                strncpy(tokens[nr_token].str,substr_start,substr_len);
+                tokens[nr_token].str[substr_len]='\0';
+                nr_token++;
+                break;
             case TK_EQ:
                 tokens[nr_token].type=TK_EQ;
                 nr_token++;
@@ -137,7 +146,7 @@ static bool make_token(char *e) {
                 tokens[nr_token].type=TK_RIGHTPAR;
                 nr_token++;
                 break;
-          default: printf("I DONT KNOW");
+          default: printf("RULE NOT FOUND");
         }
 
         break;
@@ -220,13 +229,22 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
     assert(0);
   }
   if(leftpositon==rightposition){
-    word_t sum=0;
-    word_t strpos=0;
-    while(tokens[leftpositon].str[strpos]!='\0'){
-      sum=sum*10+(tokens[leftpositon].str[strpos]-'0');
-      strpos++;
+    if(tokens[leftpositon].type==TK_NUMBER){
+      word_t sum=0;
+      word_t strpos=0;
+      while(tokens[leftpositon].str[strpos]!='\0'){
+        sum=sum*10+(tokens[leftpositon].str[strpos]-'0');
+        strpos++;
+      }
+      return sum;
     }
-    return sum; 
+    else if(tokens[leftpositon].type==TK_HEXNUMBER){
+      word_t sum=0;
+      if(sscanf(tokens[leftpositon].str, "0x%x", &sum))
+        return sum;
+      else
+        assert(0);
+    }
   }
   else if(check_parentheses(tokens,leftpositon,rightposition) == true){
 
@@ -257,6 +275,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
     }  
 
   }
+  return 0;
 }
 
 
