@@ -37,6 +37,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
+  {"0x[0-9a-fA-F]+",TK_HEXNUMBER},
   {"[0-9]+",TK_NUMBER},
   {" +", TK_NOTYPE},    // spaces
   {"\\+", TK_PLUS},         // plus
@@ -46,7 +47,6 @@ static struct rule {
   {"==", TK_EQ},        // equal
   {"\\(", TK_LEFTPAR},
   {"\\)", TK_RIGHTPAR},
-  {"0x[0-9a-fA-F]+",TK_HEXNUMBER},
   {"(\\$[0-9]+|\\$[a-zA-Z][a-zA-Z0-9]*)",TK_REGNAME},
 
 };
