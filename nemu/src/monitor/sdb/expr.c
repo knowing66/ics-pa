@@ -256,8 +256,9 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
       word_t val=0;
       bool *success=(bool *)malloc(sizeof(bool));
       val=isa_reg_str2val(tokens[leftpositon].str+1,success);
-      if(success==false){
+      if(*success==false){
         printf("REGNAME NOT FOUND");
+        free(success);
         assert(0);
       }
       else{
