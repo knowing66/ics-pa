@@ -262,6 +262,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
         assert(0);
       }
       else{
+        free(success);
         return val;
       }
     }
