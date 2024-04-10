@@ -37,6 +37,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
+  {"(\\$[0-9]+|\\$[a-zA-Z][a-zA-Z0-9]*)",TK_REGNAME},
   {"0x[0-9a-fA-F]+",TK_HEXNUMBER},
   {"[0-9]+",TK_NUMBER},
   {" +", TK_NOTYPE},    // spaces
@@ -47,7 +48,7 @@ static struct rule {
   {"==", TK_EQ},        // equal
   {"\\(", TK_LEFTPAR},
   {"\\)", TK_RIGHTPAR},
-  {"(\\$[0-9]+|\\$[a-zA-Z][a-zA-Z0-9]*)",TK_REGNAME},
+
 
 };
 
@@ -114,6 +115,12 @@ static bool make_token(char *e) {
                 break;
             case TK_HEXNUMBER:
                 tokens[nr_token].type=TK_HEXNUMBER;
+                strncpy(tokens[nr_token].str,substr_start,substr_len);
+                tokens[nr_token].str[substr_len]='\0';
+                nr_token++;
+                break;
+            case TK_REGNAME:
+                tokens[nr_token].type=TK_REGNAME;
                 strncpy(tokens[nr_token].str,substr_start,substr_len);
                 tokens[nr_token].str[substr_len]='\0';
                 nr_token++;
@@ -245,6 +252,18 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
       else
         assert(0);
     }
+    else if(tokens[leftpositon].type==TK_REGNAME){
+      word_t val=0;
+      bool *success=(bool *)malloc(sizeof(bool));
+      val=isa_reg_str2val(tokens[leftpositon].str,success);
+      if(success==false){
+        printf("REGNAME NOT FOUND");
+        assert(0);
+      }
+      else{
+        return val;
+      }
+    }
   }
   else if(check_parentheses(tokens,leftpositon,rightposition) == true){
 
@@ -275,7 +294,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
     }  
 
   }
-  return 0;
+  return 0;//there may be some problem that i didnt notice!
 }
 
 
