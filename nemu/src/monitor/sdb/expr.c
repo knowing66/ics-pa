@@ -22,9 +22,10 @@
 
 enum {
   
-  TK_NOTYPE = 256, TK_EQ,
+  TK_NOTYPE = 256, TK_EQ,TK_NEQ,
   TK_NUMBER,TK_PLUS,TK_MINUS,TK_MUL,TK_DIV,
   TK_LEFTPAR,TK_RIGHTPAR,TK_HEXNUMBER,TK_REGNAME,
+  TK_DEREF,
   /* TODO: Add more token types */
 
 };
@@ -46,6 +47,7 @@ static struct rule {
   {"\\*",TK_MUL},
   {"/",TK_DIV},
   {"==", TK_EQ},        // equal
+  {"!=", TK_NEQ}, 
   {"\\(", TK_LEFTPAR},
   {"\\)", TK_RIGHTPAR},
 
@@ -125,8 +127,12 @@ static bool make_token(char *e) {
                 tokens[nr_token].str[substr_len]='\0';
                 nr_token++;
                 break;
-            case TK_EQ:
+            case TK_NEQ:
                 tokens[nr_token].type=TK_EQ;
+                nr_token++;
+                break;
+            case TK_EQ:
+                tokens[nr_token].type=TK_NEQ;
                 nr_token++;
                 break;
             case TK_PLUS:
@@ -223,6 +229,8 @@ word_t op_level(int type){
     case TK_MINUS:return 1;
     case TK_MUL:return 2;
     case TK_DIV:return 2;
+    case TK_EQ:return 3;
+    case TK_NEQ:return 3;
     case TK_LEFTPAR:case TK_RIGHTPAR: case TK_NUMBER:return 10;
     
     default:printf("unknown op");
@@ -266,6 +274,10 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
         return val;
       }
     }
+    //else if(tokens[leftpositon].type==TK_DEREF){
+    //  word_t address=evaluate();
+    //}
+
   }
   else if(check_parentheses(tokens,leftpositon,rightposition) == true){
 
@@ -274,7 +286,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
   else{
     word_t op=rightposition;
     for(int i=rightposition;i>=leftpositon;i--){
-      if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS||tokens[i].type==TK_MUL||tokens[i].type==TK_DIV)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
+      if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS||tokens[i].type==TK_MUL||tokens[i].type==TK_DIV||tokens[i].type==TK_EQ||tokens[i].type==TK_NEQ)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
         if(op_level(tokens[i].type)<op_level(tokens[op].type)){
           op=i;
         }
@@ -292,6 +304,8 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
       case TK_MINUS: return val1 - val2;
       case TK_MUL: return val1 * val2;
       case TK_DIV: return val1 / val2;
+      case TK_EQ: return (val1==val2)?1:0;
+      case TK_NEQ: return (val1!=val2)?1:0;
       default: assert(0);
     }  
 
@@ -307,6 +321,12 @@ word_t expr(char *e, bool *success) {
   }
   //the token has been stored in tokens[32]
   /* TODO: Insert codes to evaluate the expression. */
+  for(int i=0;i<nr_token;++i){
+    if(tokens[i].type==TK_MUL&&(i==0||(tokens[i-1].type==TK_PLUS||tokens[i-1].type==TK_MINUS||tokens[i-1].type==TK_MUL||tokens[i-1].type==TK_DIV))){
+      tokens[i].type=TK_DEREF;
+    }
+  }
+
   printf("the result is %u\n",evaluate(tokens,0,nr_token-1)) ;
 
   return evaluate(tokens,0,nr_token-1);
