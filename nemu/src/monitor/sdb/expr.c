@@ -19,6 +19,7 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
+#include </home/shiyang/ics2023/nemu/include/memory/vaddr.h>
 
 enum {
   
@@ -231,6 +232,7 @@ word_t op_level(int type){
     case TK_DIV:return 2;
     case TK_EQ:return 3;
     case TK_NEQ:return 3;
+    case TK_DEREF: return 5;
     case TK_LEFTPAR:case TK_RIGHTPAR: case TK_NUMBER:return 10;
     
     default:printf("unknown op");
@@ -276,6 +278,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
     }
     //else if(tokens[leftpositon].type==TK_DEREF){
     //  word_t address=evaluate();
+
     //}
 
   }
@@ -286,7 +289,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
   else{
     word_t op=rightposition;
     for(int i=rightposition;i>=leftpositon;i--){
-      if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS||tokens[i].type==TK_MUL||tokens[i].type==TK_DIV||tokens[i].type==TK_EQ||tokens[i].type==TK_NEQ)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
+      if((tokens[i].type==TK_PLUS||tokens[i].type==TK_MINUS||tokens[i].type==TK_MUL||tokens[i].type==TK_DIV||tokens[i].type==TK_EQ||tokens[i].type==TK_NEQ||tokens[i].type==TK_DEREF)&&onlycheck_parentheses(tokens,leftpositon,i-1)&&onlycheck_parentheses(tokens,i+1,rightposition)){
         if(op_level(tokens[i].type)<op_level(tokens[op].type)){
           op=i;
         }
@@ -294,10 +297,16 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
       }
 
     }
-  
+
+    word_t val1=0,val2;
     /*op = the position of 主运算符 in the token expression;*/
-    word_t val1 = evaluate(tokens,leftpositon, op - 1);
-    word_t val2 = evaluate(tokens,op + 1, rightposition);
+    if(tokens[op].type==TK_DEREF){
+        val2 = evaluate(tokens,op + 1, rightposition);
+    }
+    else{
+        val1 = evaluate(tokens,leftpositon, op - 1);
+        val2 = evaluate(tokens,op + 1, rightposition);
+    }
 
     switch (tokens[op].type) {
       case TK_PLUS: return val1 + val2;
@@ -306,6 +315,7 @@ word_t evaluate(Token *tokens,int leftpositon,int rightposition){
       case TK_DIV: return val1 / val2;
       case TK_EQ: return (val1==val2)?1:0;
       case TK_NEQ: return (val1!=val2)?1:0;
+      case TK_DEREF: return vaddr_read(val2,4);
       default: assert(0);
     }  
 
@@ -322,7 +332,7 @@ word_t expr(char *e, bool *success) {
   //the token has been stored in tokens[32]
   /* TODO: Insert codes to evaluate the expression. */
   for(int i=0;i<nr_token;++i){
-    if(tokens[i].type==TK_MUL&&(i==0||(tokens[i-1].type==TK_PLUS||tokens[i-1].type==TK_MINUS||tokens[i-1].type==TK_MUL||tokens[i-1].type==TK_DIV))){
+    if(tokens[i].type==TK_MUL&&(i==0||(tokens[i-1].type==TK_PLUS||tokens[i-1].type==TK_MINUS||tokens[i-1].type==TK_MUL||tokens[i-1].type==TK_DIV||tokens[i].type==TK_EQ||tokens[i].type==TK_NEQ))){
       tokens[i].type=TK_DEREF;
     }
   }

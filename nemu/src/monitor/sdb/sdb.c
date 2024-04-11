@@ -19,6 +19,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include </home/shiyang/ics2023/nemu/include/memory/vaddr.h>
 
 static int is_batch_mode = false;
 
@@ -133,7 +134,7 @@ static int cmd_x(char *args){
     sscanf(args2,"%x",&address);
     sscanf(nums4bits,"%x",&num);
     for(int i=0;i<num;i++){
-      printf("0x%08x   =   0x%08x\n",address,paddr_read(address,4));
+      printf("0x%08x   =   0x%08x\n",address,vaddr_read(address,4));
       address+=4;
     }
   return 0;
