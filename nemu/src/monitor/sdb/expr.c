@@ -128,11 +128,11 @@ static bool make_token(char *e) {
                 nr_token++;
                 break;
             case TK_NEQ:
-                tokens[nr_token].type=TK_EQ;
+                tokens[nr_token].type=TK_NEQ;
                 nr_token++;
                 break;
             case TK_EQ:
-                tokens[nr_token].type=TK_NEQ;
+                tokens[nr_token].type=TK_EQ;
                 nr_token++;
                 break;
             case TK_PLUS:
