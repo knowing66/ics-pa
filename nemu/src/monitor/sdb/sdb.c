@@ -65,6 +65,8 @@ static int cmd_x(char *args);
 
 static int cmd_p(char *args);
 
+static int cmd_w(char *args);
+
 static struct {
   const char *name;
   const char *description;
@@ -77,6 +79,7 @@ static struct {
   {"info","Print the val of regesiters on screen",cmd_info},
   {"x","Examine Ram",cmd_x},
   {"p","Evaluate expression",cmd_p},
+  {"w","Watch Point",cmd_w},
 
   /* TODO: Add more commands */
 
@@ -176,6 +179,17 @@ static int cmd_p(char *args){
     // 关闭文件
     fclose(input_file);*/
     //return 0;
+}
+
+static int cmd_w(char *args){
+  WP *curwp=new_wp();
+  bool *success=NULL;
+  curwp->expr_of_wp=args;
+  expr(args,success);
+  if(*success!=false){
+    curwp->oldval=expr(args,success);
+  }
+  return 0;
 }
 
 void sdb_set_batch_mode() {
