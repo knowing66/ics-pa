@@ -185,6 +185,8 @@ static int cmd_w(char *args){
   WP *curwp=new_wp();
   bool *success=NULL;
   curwp->expr_of_wp=args;
+  curwp->type="watchpoint";
+  curwp->enb=y;
   expr(args,success);
   if(*success!=false){
     curwp->oldval=expr(args,success);

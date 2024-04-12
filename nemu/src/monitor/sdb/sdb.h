@@ -18,10 +18,17 @@
 
 #include <common.h>
 
+enum{
+  y=1,n,
+};
+
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
   char *expr_of_wp;
+  int enb;
+  char *type;
+  word_t address;
   word_t oldval;
   word_t newval;
 
