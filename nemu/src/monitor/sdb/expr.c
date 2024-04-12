@@ -233,7 +233,7 @@ word_t op_level(int type){
     case TK_EQ:return 3;
     case TK_NEQ:return 3;
     case TK_DEREF: return 5;
-    case TK_LEFTPAR:case TK_RIGHTPAR: case TK_NUMBER:return 10;
+    case TK_LEFTPAR:case TK_RIGHTPAR: case TK_NUMBER:case TK_HEXNUMBER:return 10;
     
     default:printf("unknown op");
     assert(0);
