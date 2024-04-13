@@ -199,6 +199,10 @@ static int cmd_w(char *args){
     free(success);
     curwp->oldval=expr(args,success);
   }
+  else{
+    free(success);
+    assert(0);
+  }
   return 0;
 }
 
