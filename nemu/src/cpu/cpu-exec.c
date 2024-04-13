@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include </home/shiyang/ics2023/nemu/src/monitor/sdb/sdb.h>
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -39,7 +40,33 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
- //bool *success=(bool *)malloc(sizeof(bool));
+  bool *success=(bool *)malloc(sizeof(bool));
+  WP *head=new_wp();
+  /*WP *lastwp=head;
+
+  while(lastwp->next!=NULL){
+    lastwp=lastwp->next;
+  }
+
+  free_wp(lastwp);*/
+  int exit_flag=0;
+
+  while(head->next!=NULL){
+    expr(head->expr_of_wp,success);
+    if(*success!=false){
+      head->newval=expr(head->expr_of_wp,success);
+    }
+    if(head->oldval!=head->newval){
+      exit_flag=1;
+      printf("watchpoint %d\n",head->NO);
+      printf("Value Old = %d\n",head->oldval);
+      printf("Value New = %d\n",head->newval);
+    }
+  }
+  free_wp(head);
+  if(exit_flag){
+    nemu_state.state=NEMU_STOP;
+  }
   
 }
 

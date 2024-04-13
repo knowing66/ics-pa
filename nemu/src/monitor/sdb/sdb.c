@@ -185,8 +185,12 @@ static int cmd_p(char *args){
 }
 
 static int cmd_w(char *args){
-  WP *curwp=new_wp();
+  WP *head=new_wp();
+  WP *curwp=head;
   bool *success=(bool *)malloc(sizeof(bool));
+  while(curwp->next!=NULL){
+    curwp=curwp->next;
+  }
   curwp->expr_of_wp=args;
   curwp->type="watchpoint";
   curwp->enb=y;
