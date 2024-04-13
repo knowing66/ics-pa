@@ -144,7 +144,7 @@ static int cmd_x(char *args){
 }
 
 static int cmd_p(char *args){
-  bool *success=NULL;
+  bool *success=(bool *)malloc(sizeof(bool));
   expr(args,success);
   if(*success!=false){
     printf("the result is %u\n",expr(args,success)) ;
