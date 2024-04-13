@@ -55,14 +55,14 @@ WP* new_wp(){
     free_=free_->next;
     returnptr->next=NULL;
     head->next=returnptr;
-    return returnptr;
+    return head;
   }
   else{
     WP *returnptr=free_;
     free_=free_->next;
     returnptr->next=NULL;
     head=returnptr;
-    return returnptr;
+    return head;
   }
 
 }
