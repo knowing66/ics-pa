@@ -146,6 +146,9 @@ static int cmd_x(char *args){
 static int cmd_p(char *args){
   bool *success=NULL;
   expr(args,success);
+  if(*success!=false){
+    printf("the result is %u\n",expr(args,success)) ;
+  }
   return 0;
   /*FILE *input_file = fopen("/home/shiyang/ics2023/nemu/tools/gen-expr/input", "r");
     if (input_file == NULL) {
