@@ -331,13 +331,14 @@ word_t expr(char *e, bool *success) {
   }
   //the token has been stored in tokens[32]
   /* TODO: Insert codes to evaluate the expression. */
+  *success = true;
   for(int i=0;i<nr_token;++i){
     if(tokens[i].type==TK_MUL&&(i==0||(tokens[i-1].type==TK_PLUS||tokens[i-1].type==TK_MINUS||tokens[i-1].type==TK_MUL||tokens[i-1].type==TK_DIV||tokens[i].type==TK_EQ||tokens[i].type==TK_NEQ))){
       tokens[i].type=TK_DEREF;
     }
   }
 
-  printf("the result is %u\n",evaluate(tokens,0,nr_token-1)) ;
+  //printf("the result is %u\n",evaluate(tokens,0,nr_token-1)) ;
 
   return evaluate(tokens,0,nr_token-1);
 }
