@@ -54,7 +54,6 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   while(head->next!=NULL){
     expr(head->expr_of_wp,success);
     if(*success!=false){
-      free(success);
       head->newval=expr(head->expr_of_wp,success);
       if(head->oldval!=head->newval){
         exit_flag=1;
@@ -68,6 +67,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
       assert(0);
     }
   }
+  free(success);
   free_wp(head);
   if(exit_flag){
     nemu_state.state=NEMU_STOP;
