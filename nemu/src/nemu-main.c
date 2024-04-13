@@ -14,7 +14,7 @@
 ***************************************************************************************/
 
 #include <common.h>
-//#include </home/shiyang/ics2023/nemu/src/monitor/sdb/sdb.h>
+#include </home/shiyang/ics2023/nemu/src/monitor/sdb/sdb.h>
 
 void init_monitor(int, char *[]);
 void am_init_monitor();
