@@ -54,7 +54,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
       free_wp(lastwp);*/
     
     WP *P=head;
-    free(P);
+    free_wp(P);
     head=head->next;
 
     int exit_flag=0;
