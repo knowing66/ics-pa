@@ -196,8 +196,8 @@ static int cmd_w(char *args){
   curwp->enb=y;
   expr(args,success);
   if(*success!=false){
-    free(success);
     curwp->oldval=expr(args,success);
+    free(success);
   }
   else{
     free(success);
