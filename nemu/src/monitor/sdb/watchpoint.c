@@ -17,16 +17,19 @@
 
 #define NR_WP 32
 
-/*typedef struct watchpoint {
-  int NO;
-  struct watchpoint *next;
-  char *expr_of_wp;
-  word_t oldval;
-  word_t newval;
+// typedef struct watchpoint {
+//   int NO;
+//   struct watchpoint *next;
+//   char expr_of_wp[32];
+//   int enb;
+//   char *type;
+//   word_t address;
+//   word_t oldval;
+//   word_t newval;
 
-  
+//   /* TODO: Add more members if necessary */
 
-  } WP;*/
+// } WP;
 
 static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
@@ -36,6 +39,7 @@ void init_wp_pool() {
   for (i = 0; i < NR_WP; i ++) {
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
+    strcpy(wp_pool[i].expr_of_wp,"");
   }
 
   head = NULL;

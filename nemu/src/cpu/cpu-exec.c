@@ -40,42 +40,50 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 
-  // if(free_!=wp_pool){
+  
 
   
-  //   bool *success=(bool *)malloc(sizeof(bool));
-  //   WP *head=new_wp();
-  //     /*WP *lastwp=head;
+    bool *success=(bool *)malloc(sizeof(bool));
+    WP *head=new_wp();
+      /*WP *lastwp=head;
 
-  //     while(lastwp->next!=NULL){
-  //       lastwp=lastwp->next;
-  //     }
+      while(lastwp->next!=NULL){
+        lastwp=lastwp->next;
+      }
 
-  //     free_wp(lastwp);*/
-  //   int exit_flag=0;
+      free_wp(lastwp);*/
+    
+    WP *P=head;
+    free(P);
+    head=head->next;
 
-  //   while(head->next!=NULL){
-  //     expr(head->expr_of_wp,success);
-  //     if(*success!=false){
-  //       head->newval=expr(head->expr_of_wp,success);
-  //       if(head->oldval!=head->newval){
-  //         exit_flag=1;
-  //         printf("watchpoint %d\n",head->NO);
-  //         printf("Value Old = %d\n",head->oldval);
-  //         printf("Value New = %d\n",head->newval);
-  //       }
-  //     }
-  //    else{
-  //       free(success);
-  //       assert(0);
-  //     }
-  //   }
-  //   free(success);
-  //   free_wp(head);
-  //   if(exit_flag){
-  //     nemu_state.state=NEMU_STOP;
-  //   }
-  // }
+    int exit_flag=0;
+
+    while(head!=NULL && strcmp(head->expr_of_wp, "") != 0){
+      expr(head->expr_of_wp,success);
+      if(*success!=false){
+        head->newval=expr(head->expr_of_wp,success);
+        if(head->oldval!=head->newval){
+          exit_flag=1;
+          printf("watchpoint %d\n",head->NO);
+          printf("Value Old = %d\n",head->oldval);
+          printf("Value New = %d\n",head->newval);
+        }
+      }
+     else{
+        free(success);
+        assert(0);
+      }
+      head=head->next;
+    }
+
+    free(success);
+    free_wp(head);
+    if(exit_flag){
+      nemu_state.state=NEMU_STOP;
+    }
+
+  
   
 }
 
