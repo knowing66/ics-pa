@@ -72,7 +72,12 @@ WP* new_wp(){
 }
 
 void free_wp(WP *wp){
-  wp->next=free_;
-  free_=wp;
+  if(wp==NULL){
+    return;
+  }
+  else{
+    wp->next=free_;
+    free_=wp;
+  }
 }
 
