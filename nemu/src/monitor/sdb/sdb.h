@@ -17,6 +17,7 @@
 #define __SDB_H__
 
 #include <common.h>
+//#include "expr.c"
 
 enum{
   y=1,n,
@@ -25,7 +26,7 @@ enum{
 typedef struct watchpoint {
   int NO;
   struct watchpoint *next;
-  char *expr_of_wp;
+  char expr_of_wp[32];
   int enb;
   char *type;
   word_t address;

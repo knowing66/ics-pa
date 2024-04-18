@@ -191,7 +191,8 @@ static int cmd_w(char *args){
   while(curwp->next!=NULL){
     curwp=curwp->next;
   }
-  curwp->expr_of_wp=args;
+  strcpy(curwp->expr_of_wp,args);
+  //curwp->expr_of_wp=args;
   curwp->type="watchpoint";
   curwp->enb=y;
   expr(args,success);
